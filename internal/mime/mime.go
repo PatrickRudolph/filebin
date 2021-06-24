@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/danwakefield/fnmatch"
-	"github.com/rafaelmartins/filebin/internal/mime/magic"
 )
 
 var (
@@ -22,14 +21,6 @@ func detectFromData(r io.Reader) (string, error) {
 	// read start of file and rewind
 	var buf [512]byte
 	n, _ := io.ReadFull(r, buf[:])
-
-	// magic is usually the most reliable tool, let's try it first
-	if m, err := magic.Detect(buf[:n]); err == nil && m != "" {
-		if v, ok := magicMap[m]; ok && v != "" {
-			return v, nil
-		}
-		return m, nil
-	}
 
 	// then try signature detection from net/http
 	if m := http.DetectContentType(buf[:n]); m != "" {

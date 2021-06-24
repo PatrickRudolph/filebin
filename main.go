@@ -9,7 +9,6 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/rafaelmartins/filebin/internal/filedata"
-	"github.com/rafaelmartins/filebin/internal/mime/magic"
 	"github.com/rafaelmartins/filebin/internal/settings"
 	"github.com/rafaelmartins/filebin/internal/views"
 )
@@ -61,11 +60,6 @@ func main() {
 
 	h := handlers.CustomLoggingHandler(os.Stderr, r, logHandler)
 	h = handlers.RecoveryHandler(handlers.PrintRecoveryStack(true))(h)
-
-	if err := magic.Init(); err != nil {
-		usage(err)
-	}
-	defer magic.Close()
 
 	if err := filedata.Init(); err != nil {
 		usage(err)
