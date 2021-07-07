@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/nanmu42/gzip"
 	"github.com/rafaelmartins/filebin/internal/filedata"
 	"github.com/rafaelmartins/filebin/internal/settings"
 	"github.com/rafaelmartins/filebin/internal/views"
@@ -83,7 +84,7 @@ func main() {
 	go removeOldFilesCheck(s)
 
 	fmt.Fprintf(os.Stderr, " * Listening on %s (backend: %s)\n", s.ListenAddr, s.Backend.Name())
-	if err := http.ListenAndServe(s.ListenAddr, h); err != nil {
+	if err := http.ListenAndServe(s.ListenAddr, gzip.DefaultHandler().WrapHandler(h)); err != nil {
 		usage(err)
 	}
 }
