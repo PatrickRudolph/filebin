@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -41,6 +42,20 @@ func logHandler(w io.Writer, params handlers.LogFormatterParams) {
 	)
 }
 
+func removeOldFilesCheck(s *settings.Settings) {
+
+	filedata.ForEach(func(fd *filedata.FileData) {
+		if !fd.Timestamp.Add(s.MaxAge).After(time.Now()) {
+			go filedata.Delete(fd.GetId())
+		}
+	})
+
+	go func() {
+		time.Sleep(time.Hour)
+		removeOldFilesCheck(s)
+	}()
+}
+
 func main() {
 	s, err := settings.Get()
 	if err != nil {
@@ -64,6 +79,8 @@ func main() {
 	if err := filedata.Init(); err != nil {
 		usage(err)
 	}
+
+	go removeOldFilesCheck(s)
 
 	fmt.Fprintf(os.Stderr, " * Listening on %s (backend: %s)\n", s.ListenAddr, s.Backend.Name())
 	if err := http.ListenAndServe(s.ListenAddr, h); err != nil {

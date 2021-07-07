@@ -22,6 +22,7 @@ type Settings struct {
 	HighlightStyle    string
 	IdLength          uint8
 	ListenAddr        string
+	MaxAge            time.Duration
 	S3AccessKeyId     string
 	S3SecretAccessKey string
 	S3SessionToken    string
@@ -163,6 +164,14 @@ func Get() (*Settings, error) {
 		return nil, err
 	}
 
+	maxAgeinHours, err := getUint("FILEBIN_MAX_AGE", 24*14, false, 10, 0)
+	if err != nil {
+		return nil, err
+	}
+	s.MaxAge, err = time.ParseDuration(fmt.Sprintf("%dh", maxAgeinHours))
+	if err != nil {
+		return nil, err
+	}
 	uploadMaxSizeMb, err := getUint("FILEBIN_UPLOAD_MAX_SIZE_MB", 10, true, 10, 0)
 	if err != nil {
 		return nil, err
