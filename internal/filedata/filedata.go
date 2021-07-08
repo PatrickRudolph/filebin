@@ -13,9 +13,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rafaelmartins/filebin/internal/id"
-	"github.com/rafaelmartins/filebin/internal/mime"
-	"github.com/rafaelmartins/filebin/internal/settings"
+	"github.com/PatrickRudolph/filebin/internal/id"
+	"github.com/PatrickRudolph/filebin/internal/mime"
+	"github.com/PatrickRudolph/filebin/internal/settings"
 )
 
 var (

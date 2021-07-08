@@ -6,14 +6,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/PatrickRudolph/filebin/internal/basicauth"
+	"github.com/PatrickRudolph/filebin/internal/filedata"
+	"github.com/PatrickRudolph/filebin/internal/highlight"
+	"github.com/PatrickRudolph/filebin/internal/renderers"
+	"github.com/PatrickRudolph/filebin/internal/settings"
+	"github.com/PatrickRudolph/filebin/internal/utils"
+	"github.com/PatrickRudolph/filebin/internal/version"
 	"github.com/gorilla/mux"
-	"github.com/rafaelmartins/filebin/internal/basicauth"
-	"github.com/rafaelmartins/filebin/internal/filedata"
-	"github.com/rafaelmartins/filebin/internal/highlight"
-	"github.com/rafaelmartins/filebin/internal/renderers"
-	"github.com/rafaelmartins/filebin/internal/settings"
-	"github.com/rafaelmartins/filebin/internal/utils"
-	"github.com/rafaelmartins/filebin/internal/version"
 )
 
 var (
@@ -30,7 +30,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	fmt.Fprintf(w, "%s\n", logo)
 	fmt.Fprintf(w, "Version %s, running at %s\n\n", version.Version, r.Host)
-	fmt.Fprintf(w, "Source code: https://github.com/rafaelmartins/filebin\n")
+	fmt.Fprintf(w, "Source code: https://github.com/patrickrudolph/filebin\n")
+	fmt.Fprintf(w, "Based on: https://github.com/rafaelmartins/filebin\n")
 }
 
 func Robots(w http.ResponseWriter, r *http.Request) {

@@ -7,12 +7,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/PatrickRudolph/filebin/internal/filedata"
+	"github.com/PatrickRudolph/filebin/internal/settings"
+	"github.com/PatrickRudolph/filebin/internal/views"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/nanmu42/gzip"
-	"github.com/rafaelmartins/filebin/internal/filedata"
-	"github.com/rafaelmartins/filebin/internal/settings"
-	"github.com/rafaelmartins/filebin/internal/views"
 )
 
 func usage(err error) {

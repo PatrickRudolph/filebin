@@ -4,11 +4,11 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/rafaelmartins/filebin/internal/filedata"
-	"github.com/rafaelmartins/filebin/internal/renderers/highlight"
-	"github.com/rafaelmartins/filebin/internal/renderers/html"
-	"github.com/rafaelmartins/filebin/internal/renderers/markdown"
-	"github.com/rafaelmartins/filebin/internal/renderers/raw"
+	"github.com/PatrickRudolph/filebin/internal/filedata"
+	"github.com/PatrickRudolph/filebin/internal/renderers/highlight"
+	"github.com/PatrickRudolph/filebin/internal/renderers/html"
+	"github.com/PatrickRudolph/filebin/internal/renderers/markdown"
+	"github.com/PatrickRudolph/filebin/internal/renderers/raw"
 )
 
 var (

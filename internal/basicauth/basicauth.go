@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/rafaelmartins/filebin/internal/settings"
+	"github.com/PatrickRudolph/filebin/internal/settings"
 )
 
 func BasicAuth(w http.ResponseWriter, r *http.Request) bool {

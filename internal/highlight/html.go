@@ -5,10 +5,10 @@ import (
 	"io"
 	"io/ioutil"
 
+	"github.com/PatrickRudolph/filebin/internal/settings"
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters/html"
 	"github.com/alecthomas/chroma/styles"
-	"github.com/rafaelmartins/filebin/internal/settings"
 )
 
 var (

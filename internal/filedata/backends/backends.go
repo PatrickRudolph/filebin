@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/rafaelmartins/filebin/internal/filedata/backends/local"
-	"github.com/rafaelmartins/filebin/internal/filedata/backends/s3"
+	"github.com/PatrickRudolph/filebin/internal/filedata/backends/local"
+	"github.com/PatrickRudolph/filebin/internal/filedata/backends/s3"
 )
 
 type Backend interface {

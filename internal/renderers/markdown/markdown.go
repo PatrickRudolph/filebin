@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/rafaelmartins/filebin/internal/filedata"
+	"github.com/PatrickRudolph/filebin/internal/filedata"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"

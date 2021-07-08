@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/rafaelmartins/filebin/internal/filedata"
-	"github.com/rafaelmartins/filebin/internal/highlight"
+	"github.com/PatrickRudolph/filebin/internal/filedata"
+	"github.com/PatrickRudolph/filebin/internal/highlight"
 )
 
 type HighlightRenderer struct{}

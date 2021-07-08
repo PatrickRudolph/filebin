@@ -5,8 +5,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/rafaelmartins/filebin/internal/filedata"
-	"github.com/rafaelmartins/filebin/internal/highlight"
+	"github.com/PatrickRudolph/filebin/internal/filedata"
+	"github.com/PatrickRudolph/filebin/internal/highlight"
 )
 
 var (

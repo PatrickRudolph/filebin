@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/rafaelmartins/filebin/internal/filedata"
+	"github.com/PatrickRudolph/filebin/internal/filedata"
 )
 
 type RawRenderer struct{}
