@@ -29,6 +29,7 @@ type registry struct {
 	data      map[string]*FileData
 	dataslice []*FileData
 	m         sync.RWMutex
+	c         *sync.Cond
 }
 
 type FileData struct {
@@ -206,6 +207,8 @@ func NewFromRequest(r *http.Request) ([]*FileData, error) {
 	if len(fds) == 0 {
 		return nil, err
 	}
+	reg.c.Broadcast()
+
 	return fds, err
 }
 
@@ -236,6 +239,14 @@ func ToJSON() ([]byte, error) {
 	return json.Marshal(reg.dataslice)
 }
 
+func WaitForEvent() error {
+	reg.m.Lock()
+	defer reg.m.Unlock()
+	reg.c.Wait()
+
+	return nil
+}
+
 func Delete(id string) error {
 	s, err := settings.Get()
 	if err != nil {
@@ -259,6 +270,8 @@ func Delete(id string) error {
 		}
 	}
 	reg.dataslice = n
+
+	reg.c.Broadcast()
 
 	return s.Backend.Delete(fd.id)
 }
@@ -300,4 +313,8 @@ func (f *FileData) Read() (io.ReadCloser, error) {
 	}
 
 	return s.Backend.Read(f.id)
+}
+
+func init() {
+	reg.c = sync.NewCond(&reg.m)
 }

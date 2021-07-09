@@ -68,6 +68,7 @@ func main() {
 	r.HandleFunc("/", views.Index)
 	r.HandleFunc("/robots.txt", views.Robots)
 	r.HandleFunc("/list", views.List)
+	r.HandleFunc("/event", views.Event)
 	r.HandleFunc("/{id}.json", views.FileJSON)
 	r.HandleFunc("/{id}.txt", views.FileText)
 	r.HandleFunc("/{id}/download", views.FileDownload)

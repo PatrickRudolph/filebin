@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/PatrickRudolph/filebin/internal/basicauth"
 	"github.com/PatrickRudolph/filebin/internal/filedata"
@@ -88,6 +89,30 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "%s\n", fd.GetId())
 		}
 	}
+}
+
+func Event(w http.ResponseWriter, r *http.Request) {
+	// authentication
+	if !basicauth.BasicAuth(w, r) {
+		return
+	}
+
+	timeout := time.Minute * 5
+
+	done := make(chan struct{})
+	go func() {
+		filedata.WaitForEvent()
+		close(done)
+	}()
+	select {
+	case <-time.After(timeout):
+		w.WriteHeader(http.StatusRequestTimeout)
+		// timed out
+	case <-done:
+		// Wait returned
+	}
+
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 }
 
 func List(w http.ResponseWriter, r *http.Request) {

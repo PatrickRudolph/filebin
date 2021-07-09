@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 type HTTPFileUploader struct {
@@ -110,6 +111,41 @@ func (h *HTTPFileUploader) Upload(src string, name string) (url string, err erro
 	url = string(resp_body)
 	if !strings.Contains(url, "http://") && !strings.Contains(url, "https://") {
 		url = h.Url + "/" + url
+	}
+	return
+}
+
+func (h *HTTPFileUploader) WaitForEvent() (err error) {
+
+	// Create client
+	client := &http.Client{
+		Timeout: time.Minute * 10,
+	}
+
+	// Create request
+	req, err := http.NewRequest(http.MethodGet, h.Url+"/event", nil)
+	if err != nil {
+		return
+	}
+	if h.Username != "" {
+		req.SetBasicAuth(h.Username, h.Password)
+	}
+	// Fetch Request
+	resp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read Response Body
+	_, err = ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+
+	if !strings.Contains(resp.Status, "200") && !strings.Contains(resp.Status, "OK") {
+		err = fmt.Errorf("Got HTTP Status %s", resp.Status)
+		return
 	}
 	return
 }
