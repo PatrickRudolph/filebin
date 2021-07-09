@@ -15,25 +15,17 @@ var (
 )
 
 type Settings struct {
-	AuthRealm         string
-	AuthUsername      string
-	AuthPassword      string
-	BaseUrl           string
-	HighlightStyle    string
-	IdLength          uint8
-	ListenAddr        string
-	MaxAge            time.Duration
-	S3AccessKeyId     string
-	S3SecretAccessKey string
-	S3SessionToken    string
-	S3Endpoint        string
-	S3Region          string
-	S3Bucket          string
-	S3PresignExpire   time.Duration
-	S3ProxyData       bool
-	StorageDir        string
-	UploadMaxSizeMb   uint
-	Backend           backends.Backend
+	AuthRealm       string
+	AuthUsername    string
+	AuthPassword    string
+	BaseUrl         string
+	HighlightStyle  string
+	IdLength        uint8
+	ListenAddr      string
+	MaxAge          time.Duration
+	StorageDir      string
+	UploadMaxSizeMb uint
+	Backend         backends.Backend
 }
 
 func getString(key string, def string, required bool) (string, error) {
@@ -123,42 +115,6 @@ func Get() (*Settings, error) {
 		return nil, err
 	}
 
-	s.S3AccessKeyId, err = getString("FILEBIN_S3_ACCESS_KEY_ID", "", false)
-	if err != nil {
-		return nil, err
-	}
-
-	s.S3SecretAccessKey, err = getString("FILEBIN_S3_SECRET_ACCESS_KEY", "", false)
-	if err != nil {
-		return nil, err
-	}
-
-	s.S3Endpoint, err = getString("FILEBIN_S3_ENDPOINT", "", false)
-	if err != nil {
-		return nil, err
-	}
-
-	s.S3Region, err = getString("FILEBIN_S3_REGION", "", false)
-	if err != nil {
-		return nil, err
-	}
-
-	s.S3Bucket, err = getString("FILEBIN_S3_BUCKET", "", false)
-	if err != nil {
-		return nil, err
-	}
-
-	s3PresignExpireMinutes, err := getUint("FILEBIN_S3_PRESIGN_EXPIRE_MINUTES", 5, true, 10, 0)
-	if err != nil {
-		return nil, err
-	}
-	s.S3PresignExpire = time.Duration(s3PresignExpireMinutes) * time.Minute
-
-	s.S3ProxyData, err = getBool("FILEBIN_S3_PROXY_DATA", false)
-	if err != nil {
-		return nil, err
-	}
-
 	s.StorageDir, err = getString("FILEBIN_STORAGE_DIR", "", false)
 	if err != nil {
 		return nil, err
@@ -183,13 +139,6 @@ func Get() (*Settings, error) {
 
 	s.Backend, err = backends.Lookup(
 		s.StorageDir,
-		s.S3AccessKeyId,
-		s.S3SecretAccessKey,
-		s.S3Endpoint,
-		s.S3Region,
-		s.S3Bucket,
-		s.S3PresignExpire,
-		s.S3ProxyData,
 	)
 	if err != nil {
 		return nil, err
