@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -10,6 +11,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/PatrickRudolph/filebin/internal/filedata"
 )
 
 type HTTPFileUploader struct {
@@ -147,5 +150,43 @@ func (h *HTTPFileUploader) WaitForEvent() (err error) {
 		err = fmt.Errorf("Got HTTP Status %s", resp.Status)
 		return
 	}
+	return
+}
+
+func (h *HTTPFileUploader) List() (fds []filedata.FileData, err error) {
+
+	// Create client
+	client := &http.Client{
+		Timeout: time.Minute * 10,
+	}
+
+	// Create request
+	req, err := http.NewRequest(http.MethodGet, h.Url+"/list", nil)
+	if err != nil {
+		return
+	}
+	if h.Username != "" {
+		req.SetBasicAuth(h.Username, h.Password)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read Response Body
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+
+	if !strings.Contains(resp.Status, "200") && !strings.Contains(resp.Status, "OK") {
+		err = fmt.Errorf("Got HTTP Status %s", resp.Status)
+		return
+	}
+	err = json.Unmarshal(body, &fds)
+
 	return
 }

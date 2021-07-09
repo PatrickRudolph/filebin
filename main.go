@@ -47,7 +47,7 @@ func removeOldFilesCheck(s *settings.Settings) {
 
 	filedata.ForEach(func(fd *filedata.FileData) {
 		if !fd.Timestamp.Add(s.MaxAge).After(time.Now()) {
-			go filedata.Delete(fd.GetId())
+			go filedata.Delete(fd.Id)
 		}
 	})
 

@@ -84,9 +84,9 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 		if baseUrl != "" {
-			fmt.Fprintf(w, "%s/%s\n", baseUrl, fd.GetId())
+			fmt.Fprintf(w, "%s/%s\n", baseUrl, fd.Id)
 		} else {
-			fmt.Fprintf(w, "%s\n", fd.GetId())
+			fmt.Fprintf(w, "%s\n", fd.Id)
 		}
 	}
 }
@@ -141,9 +141,9 @@ func List(w http.ResponseWriter, r *http.Request) {
 	} else {
 		filedata.ForEach(func(fd *filedata.FileData) {
 			if baseUrl != "" {
-				fmt.Fprintf(w, "%s: %s (%s) -> %s/%s\n", fd.Timestamp, fd.Filename, fd.Mimetype, baseUrl, fd.GetId())
+				fmt.Fprintf(w, "%s: %s (%s) -> %s/%s\n", fd.Timestamp, fd.Filename, fd.Mimetype, baseUrl, fd.Id)
 			} else {
-				fmt.Fprintf(w, "%s: %s (%s) -> %s\n", fd.Timestamp, fd.Filename, fd.Mimetype, fd.GetId())
+				fmt.Fprintf(w, "%s: %s (%s) -> %s\n", fd.Timestamp, fd.Filename, fd.Mimetype, fd.Id)
 			}
 		})
 

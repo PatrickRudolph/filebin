@@ -33,7 +33,7 @@ type registry struct {
 }
 
 type FileData struct {
-	id        string
+	Id        string    `json:"id"`
 	Filename  string    `json:"filename"`
 	Mimetype  string    `json:"mimetype"`
 	Size      int64     `json:"size"`
@@ -71,7 +71,7 @@ func newfd(id string) (*FileData, error) {
 	}
 
 	fd := &FileData{
-		id:        id,
+		Id:        id,
 		Filename:  filename,
 		Mimetype:  mimetype,
 		Size:      size,
@@ -79,7 +79,7 @@ func newfd(id string) (*FileData, error) {
 	}
 
 	reg.m.Lock()
-	reg.data[fd.id] = fd
+	reg.data[fd.Id] = fd
 	reg.dataslice = append(reg.dataslice, fd)
 	reg.m.Unlock()
 
@@ -261,11 +261,11 @@ func Delete(id string) error {
 	reg.m.Lock()
 	defer reg.m.Unlock()
 
-	delete(reg.data, fd.id)
+	delete(reg.data, fd.Id)
 
 	n := []*FileData{}
 	for _, v := range reg.dataslice {
-		if v.id != id {
+		if v.Id != id {
 			n = append(n, v)
 		}
 	}
@@ -273,11 +273,11 @@ func Delete(id string) error {
 
 	reg.c.Broadcast()
 
-	return s.Backend.Delete(fd.id)
+	return s.Backend.Delete(fd.Id)
 }
 
 func (f *FileData) GetId() string {
-	return f.id
+	return f.Id
 }
 
 func (f *FileData) GetFilename() string {
@@ -303,7 +303,7 @@ func (f *FileData) Serve(w http.ResponseWriter, r *http.Request, filename string
 		return err
 	}
 
-	return s.Backend.Serve(w, r, f.id, filename, mimetype, attachment)
+	return s.Backend.Serve(w, r, f.Id, filename, mimetype, attachment)
 }
 
 func (f *FileData) Read() (io.ReadCloser, error) {
@@ -312,7 +312,7 @@ func (f *FileData) Read() (io.ReadCloser, error) {
 		return nil, err
 	}
 
-	return s.Backend.Read(f.id)
+	return s.Backend.Read(f.Id)
 }
 
 func init() {
