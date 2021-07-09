@@ -101,16 +101,29 @@ func List(w http.ResponseWriter, r *http.Request) {
 		baseUrl = s.BaseUrl
 	}
 
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 
-	filedata.ForEach(func(fd *filedata.FileData) {
-		if baseUrl != "" {
-			fmt.Fprintf(w, "%s: %s (%s) -> %s/%s\n", fd.Timestamp, fd.Filename, fd.Mimetype, baseUrl, fd.GetId())
+	if r.Header.Get("Content-Type") == "application/json" {
+		data, err := filedata.ToJSON()
+		if err == nil {
+			fmt.Fprintf(w, "%s", string(data))
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		} else {
-			fmt.Fprintf(w, "%s: %s (%s) -> %s\n", fd.Timestamp, fd.Filename, fd.Mimetype, fd.GetId())
+			fmt.Fprintf(w, "Error: %v", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		}
-	})
+	} else {
+		filedata.ForEach(func(fd *filedata.FileData) {
+			if baseUrl != "" {
+				fmt.Fprintf(w, "%s: %s (%s) -> %s/%s\n", fd.Timestamp, fd.Filename, fd.Mimetype, baseUrl, fd.GetId())
+			} else {
+				fmt.Fprintf(w, "%s: %s (%s) -> %s\n", fd.Timestamp, fd.Filename, fd.Mimetype, fd.GetId())
+			}
+		})
+
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	}
 }
 
 func Delete(w http.ResponseWriter, r *http.Request) {

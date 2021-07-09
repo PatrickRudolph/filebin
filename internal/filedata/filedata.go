@@ -1,6 +1,7 @@
 package filedata
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -226,6 +227,13 @@ func ForEach(f func(*FileData)) {
 	for _, fd := range reg.dataslice {
 		f(fd)
 	}
+}
+
+func ToJSON() ([]byte, error) {
+	reg.m.RLock()
+	defer reg.m.RUnlock()
+
+	return json.Marshal(reg.dataslice)
 }
 
 func Delete(id string) error {
